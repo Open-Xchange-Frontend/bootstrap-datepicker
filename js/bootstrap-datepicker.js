@@ -87,6 +87,7 @@
 		this.dates = new DateArray();
 		this.viewDate = UTCToday();
 		this.focusDate = null;
+		this.parentEl = (options.parentEl && $(options.parentEl)) || $('body');
 
 		this._process_options(options);
 
@@ -409,7 +410,7 @@
 
 		show: function(){
 			if (!this.isInline)
-				this.picker.appendTo('body');
+				this.picker.appendTo(this.parentEl);
 			this.picker.show();
 			this.place();
 			this._attachSecondaryEvents();
@@ -547,14 +548,15 @@
 				windowHeight = $window.height(),
 				scrollTop = $window.scrollTop();
 
-			var zIndex = parseInt(this.element.parents().filter(function(){
-					return $(this).css('z-index') !== 'auto';
-				}).first().css('z-index'))+10;
-			var offset = this.component ? this.component.parent().offset() : this.element.offset();
+			var zIndex = parseInt(this.element.parents().filter(function() {
+							return $(this).css('z-index') != 'auto';
+						}).first().css('z-index'))+10;
+			var offset = this.component ? this.component.parent().position() : this.element.position();
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
 			var left = offset.left,
-				top = offset.top;
+				top = offset.top,
+				scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop() + 5;
 
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
@@ -596,7 +598,7 @@
 				top -= calendarHeight + parseInt(this.picker.css('padding-top'));
 
 			this.picker.css({
-				top: top,
+				top: top + scrollTopContainer,
 				left: left,
 				zIndex: zIndex
 			});
@@ -749,10 +751,16 @@
 						.text(dates[this.o.language].months[month]+' '+year);
 			this.picker.find('tfoot th.today')
 						.text(todaytxt)
-						.toggle(this.o.todayBtn !== false);
+						// Bug 27629 - After creating an appointment week view "scrolls up" to 0 AM (Firefox only)
+						if (this.o.todayBtn === false) {
+							this.picker.find('tfoot th.today').hide();
+						}
 			this.picker.find('tfoot th.clear')
 						.text(cleartxt)
-						.toggle(this.o.clearBtn !== false);
+						// Bug 27629 - After creating an appointment week view "scrolls up" to 0 AM (Firefox only)
+						if (this.o.clearBtn === false) {
+							this.picker.find('tfoot th.clear').hide();
+						}
 			this.updateNavArrows();
 			this.fillMonths();
 			var prevMonth = UTCDate(year, month-1, 28),
