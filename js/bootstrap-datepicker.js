@@ -43,7 +43,7 @@
 
 		this.element = $(element);
 		this.isInline = false;
-		this.isInput = this.element.is('input');
+		this.isInput = this.element.is('input') || this.element.is('a');
 		this.component = this.element.is('.date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
 		this.hasInput = this.component && this.element.find('input').length;
 		if(this.component && this.component.length === 0)
@@ -52,6 +52,12 @@
 		this.picker = $(DPGlobal.template);
 		this._buildEvents();
 		this._attachEvents();
+
+		if (this.element.is('a')) {
+            this.element.val = function (value) {
+	            return arguments.length === 0 ? this.data('date2') : this.data('date2', value);
+            };
+		}
 
 		if(this.isInline) {
 			this.picker.addClass('datepicker-inline').appendTo(this.element);
@@ -571,6 +577,7 @@
 				cls.push('today');
 			}
 			if (date.valueOf() == currentDate) {
+				this.element.attr('aria-selected', this.getFormattedDate());
 				cls.push('active');
 			}
 			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
