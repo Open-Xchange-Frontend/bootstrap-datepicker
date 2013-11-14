@@ -562,7 +562,7 @@
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
 			var left = offset.left,
 				top = offset.top,
-				scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop() + 5;
+				scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop();
 
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
