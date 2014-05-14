@@ -917,7 +917,7 @@
 
 		click: function(e){
 			e.preventDefault();
-			var target = $(e.target).closest('span, td, th'),
+			var target = $(e.target).closest('span, td, th', this.picker[0]);
 				year, month, day;
 			if (target.length === 1){
 				switch (target[0].nodeName.toLowerCase()){
