@@ -434,8 +434,7 @@
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
 			var left = offset.left,
-				top = offset.top,
-				scrollTopContainer = $(this.element).closest('.window-content.scrollable').scrollTop();
+				top = offset.top;
 
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
@@ -477,7 +476,7 @@
 				top -= calendarHeight + parseInt(this.picker.css('padding-top'));
 
 			this.picker.css({
-				top: top + scrollTopContainer,
+				top: top,
 				left: left,
 				zIndex: zIndex
 			});
