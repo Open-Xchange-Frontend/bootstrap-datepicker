@@ -499,7 +499,6 @@
 			}
 
 			this.date = DPGlobal.parseDate(date, this.o.format, this.o.language);
-
 			if (fromArgs) {
 				// setting date by clicking
 				this.setValue();
@@ -519,8 +518,8 @@
 				this.viewDate = new Date(this.o.endDate);
 				this.date = new Date(this.o.endDate);
 			} else {
-				this.viewDate = new Date(this.date);
-				this.date = new Date(this.date);
+				this.viewDate = new Date(this.date.getTime());
+				this.date = new Date(this.date.getTime());
 			}
 			this.fill();
 		},
@@ -594,7 +593,7 @@
 		},
 
 		fill: function() {
-			var d = new Date(this.viewDate),
+			var d = new Date(this.viewDate.getTime()),
 				year = d.getUTCFullYear(),
 				month = d.getUTCMonth(),
 				startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
